@@ -20,11 +20,11 @@ String String_from_parts(const char *data, size_t length)
  * @param[in] source a String object to delete.
  * @return Nothing.
  */
-void String_delete(String source)
+void String_delete(String *source)
 {
-    free((char *)source.data);
-    source.length = 0;
-    source.data = NULL;
+    free((char *)source->data);
+    source->length = 0;
+    source->data = NULL;
 }
 
 /**
@@ -48,7 +48,7 @@ String String_from(const char *cstr)
         buffer[buf_size - 1] = '\0';
     }
 
-    return String_from_parts(cstr, buf_size - 1);
+    return String_from_parts(buffer, buf_size - 1);
 }
 
 /**
