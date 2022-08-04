@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <stdlib.h>
 #include "string_type.h"
 
 /**
@@ -16,16 +16,39 @@ String String_from_parts(const char *data, size_t length)
 }
 
 /**
+ * Frees a String object from memory.
+ * @param[in] source a String object to delete.
+ * @return Nothing.
+ */
+void String_delete(String source)
+{
+    free((char *)source.data);
+    source.length = 0;
+    source.data = NULL;
+}
+
+/**
  * Creates a String from a c-string.
  * @param[in] cstr a c-string.
  * @return a String object.
  */
 String String_from(const char *cstr)
 {
-    size_t len;
-    for (len = 0; cstr[len] != '\0'; len++)
-        ;
-    return String_from_parts(cstr, len);
+    // create an empty string buffer
+    size_t buf_size = 1;
+    char *buffer = (char *)malloc(1 * sizeof(char));
+    buffer[0] = '\0';
+
+    // copy data from cstr to buffer
+    while (cstr[buf_size - 1] != '\0')
+    {
+        ++buf_size;
+        buffer = (char *)realloc(buffer, buf_size * sizeof(char));
+        buffer[buf_size - 2] = cstr[buf_size - 2];
+        buffer[buf_size - 1] = '\0';
+    }
+
+    return String_from_parts(cstr, buf_size - 1);
 }
 
 /**
@@ -36,13 +59,11 @@ String String_from(const char *cstr)
 String String_copy(const String source)
 {
     // copy source.data into a buffer
-    char buffer[source.length + 1];
-    for (size_t i = 0; i < source.length; i++)
+    size_t len = source.length;
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+    for (size_t i = 0; i < len; i++)
         buffer[i] = source.data[i];
-    buffer[source.length] = '\0';
+    buffer[len] = '\0';
 
-    String copy;
-    copy.length = source.length;
-    copy.data = buffer;
-    return copy;
+    return String_from_parts(buffer, len);
 }
