@@ -12,6 +12,7 @@ typedef struct
 
 String String_from_parts(const char *data, size_t length);
 String String_from(const char *cstr);
+String String_copy(const String source);
 
 ///< Defines macro for creating an empty string.
 #define String_Empty String_from_parts(NULL, 0)

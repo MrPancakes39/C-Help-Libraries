@@ -25,3 +25,22 @@ String String_from(const char *cstr)
 {
     return String_from_parts(cstr, strlen(cstr));
 }
+
+/**
+ * Creates a copy of a String object.
+ * @param[in] source a String object.
+ * @return a String object.
+ */
+String String_copy(const String source)
+{
+    // copy source.data into a buffer
+    char buffer[source.length + 1];
+    for (size_t i = 0; i < source.length; i++)
+        buffer[i] = source.data[i];
+    buffer[source.length] = '\0';
+
+    String copy;
+    copy.length = source.length;
+    copy.data = buffer;
+    return copy;
+}
