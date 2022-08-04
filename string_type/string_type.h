@@ -21,6 +21,10 @@ void String_delete(String *source);
 void String_trimLeft(String *const source);
 void String_trimRight(String *const source);
 void String_trim(String *const source);
+
+void String_padLeft(String *const source, size_t length, char ch);
+void String_padRight(String *const source, size_t length, char ch);
+void String_pad(String *const source, size_t length, char ch);
 // ===============================================================
 
 ///< Defines macro for creating an empty string.

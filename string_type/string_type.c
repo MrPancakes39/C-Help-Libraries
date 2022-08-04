@@ -125,3 +125,39 @@ void String_trim(String *const source)
     String_trimLeft(source);
     String_trimRight(source);
 }
+
+void String_padLeft(String *const source, size_t length, char ch)
+{
+    // resize the sring.
+    size_t len = source->length + length;
+    char *padded = (char *)source->data;
+    padded = (char *)realloc(padded, (len + 1) * sizeof(char));
+
+    // shift all chars and append ch to start
+    for (size_t i = len - 1; i >= length; i--)
+        padded[i] = (padded - length)[i];
+    for (size_t i = 0; i < length; i++)
+        padded[i] = ch;
+
+    *source = String_from_parts(padded, len);
+}
+
+void String_padRight(String *const source, size_t length, char ch)
+{
+    // resize the sring.
+    size_t len = source->length + length;
+    char *padded = (char *)source->data;
+    padded = (char *)realloc(padded, (len + 1) * sizeof(char));
+
+    // append ch to end
+    for (size_t i = len - length; i < len; i++)
+        padded[i] = ch;
+
+    *source = String_from_parts(padded, len);
+}
+
+void String_pad(String *const source, size_t length, char ch)
+{
+    String_padLeft(source, length, ch);
+    String_padRight(source, length, ch);
+}
