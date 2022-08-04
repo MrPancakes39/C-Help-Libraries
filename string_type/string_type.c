@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <string.h>
 #include "string_type.h"
 
 /**
@@ -23,7 +22,10 @@ String String_from_parts(const char *data, size_t length)
  */
 String String_from(const char *cstr)
 {
-    return String_from_parts(cstr, strlen(cstr));
+    size_t len;
+    for (len = 0; cstr[len] != '\0'; len++)
+        ;
+    return String_from_parts(cstr, len);
 }
 
 /**
