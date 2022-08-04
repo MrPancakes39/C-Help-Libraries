@@ -67,3 +67,61 @@ String String_copy(const String source)
 
     return String_from_parts(buffer, len);
 }
+
+///< defines isspace so no need to import ctype.h
+#define isspace(c) (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == 'f')
+
+/**
+ * Remove spaces at the beginning of a String object.
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_trimLeft(String *const source)
+{
+    size_t start = 0;
+    while (start < source->length && isspace(source->data[start]))
+        start++;
+
+    // shift source.data to the beginning.
+    size_t len = source->length - start;
+    char *trimmed = (char *)source->data;
+    for (size_t i = 0; i < len; i++)
+        trimmed[i] = (source->data + start)[i];
+    trimmed[len] = '\0';
+
+    trimmed = (char *)realloc(trimmed, (len + 1) * sizeof(char));
+    trimmed[len] = '\0';
+
+    *source = String_from_parts(trimmed, len);
+}
+
+/**
+ * Remove spaces at the end of a String object.
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_trimRight(String *const source)
+{
+    size_t end = 0;
+    while (end < source->length && isspace(source->data[source->length - 1 - end]))
+        end++;
+
+    // remove the ending of source.data.
+    size_t len = source->length - end;
+    char *trimmed = (char *)source->data;
+    trimmed = (char *)realloc(trimmed, (len + 1) * sizeof(char));
+    trimmed[len] = '\0';
+
+    *source = String_from_parts(trimmed, len);
+}
+
+/**
+ * Remove spaces at the beginning and at the end of the string:
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_trim(String *const source)
+{
+    String_trimLeft(source);
+    String_trimRight(source);
+}

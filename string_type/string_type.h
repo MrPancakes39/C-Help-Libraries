@@ -10,12 +10,18 @@ typedef struct
     size_t length;
 } String;
 
-// ================= String Creation Functions ==================
+// ================== String Creation Functions ==================
 String String_from_parts(const char *data, size_t length);
 String String_from(const char *cstr);
 String String_copy(const String source);
 void String_delete(String *source);
-// ==============================================================
+// ===============================================================
+
+// ======================= String Methods  =======================
+void String_trimLeft(String *const source);
+void String_trimRight(String *const source);
+void String_trim(String *const source);
+// ===============================================================
 
 ///< Defines macro for creating an empty string.
 #define String_Empty String_from_parts(NULL, 0)
