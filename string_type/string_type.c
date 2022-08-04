@@ -307,3 +307,66 @@ bool String_endsWithL(const String source, const char *suffix)
     // use the previous function
     return String_endsWith(source, suffixStr);
 }
+
+/**
+ * Converts a string to lowercase.
+ * @param[in] source a String object.
+ * @return Nothing.
+ */
+void String_lower(String *const source)
+{
+    char *tmp = (char *)source->data;
+    for (size_t i = 0; i < source->length; i++)
+        tmp[i] = tolower(tmp[i]);
+}
+
+/**
+ * Converts a string to uppercase.
+ * @param[in] source a String object.
+ * @return Nothing.
+ */
+void String_upper(String *const source)
+{
+    char *tmp = (char *)source->data;
+    for (size_t i = 0; i < source->length; i++)
+        tmp[i] = toupper(tmp[i]);
+}
+
+/**
+ * Converts a string to a capitalized version of itself.
+ *
+ * More specifically, makes the first character have upper case and the rest lower.
+ * @param[in] source a String object.
+ * @return Nothing.
+ */
+void String_capitalize(String *const source)
+{
+    char *tmp = (char *)source->data;
+    String_lower(source);
+    tmp[0] = toupper(tmp[0]);
+}
+
+/**
+ * Converts a string to a version of the string where each word is titlecased.
+ *
+ * More specifically, words start with uppercased characters and all remaining cased characters have lower case.
+ * @param[in] source a String object.
+ * @return Nothing.
+ */
+void String_title(String *const source)
+{
+    size_t i = 0;
+    char *tmp = (char *)source->data;
+    tmp[0] = toupper(tmp[0]);
+    for (i = 1; i < source->length; i++)
+    {
+        if (isspace(tmp[i]))
+        {
+            // move to next char and upper it
+            ++i;
+            tmp[i] = toupper(tmp[i]);
+        }
+        else
+            tmp[i] = tolower(tmp[i]);
+    }
+}

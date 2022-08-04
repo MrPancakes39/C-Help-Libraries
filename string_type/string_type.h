@@ -38,6 +38,11 @@ bool String_startWithL(const String source, const char *prefix);
 bool String_endsWith(const String source, const String suffix);
 bool String_endsWithL(const String source, const char *suffix);
 
+void String_lower(String *const source);
+void String_upper(String *const source);
+void String_capitalize(String *const source);
+void String_title(String *const source);
+
 // ===============================================================
 
 ///< Defines macro for creating an empty string.
