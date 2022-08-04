@@ -53,7 +53,7 @@ String String_from(const char *cstr)
 
 /**
  * Creates a copy of a String object.
- * @param[in] source a String object.
+ * @param[in] source the String object to copy.
  * @return a String object.
  */
 String String_copy(const String source)
@@ -73,6 +73,7 @@ String String_copy(const String source)
 
 /**
  * Remove spaces at the beginning of a String object.
+ * @param[in] source the String object to trim.
  * @note This function modifies the original string object.
  * @return Nothing.
  */
@@ -97,6 +98,7 @@ void String_trimLeft(String *const source)
 
 /**
  * Remove spaces at the end of a String object.
+ * @param[in] source the String object to trim.
  * @note This function modifies the original string object.
  * @return Nothing.
  */
@@ -117,6 +119,7 @@ void String_trimRight(String *const source)
 
 /**
  * Remove spaces at the beginning and at the end of the string:
+ * @param[in] source the String object to trim.
  * @note This function modifies the original string object.
  * @return Nothing.
  */
@@ -126,38 +129,56 @@ void String_trim(String *const source)
     String_trimRight(source);
 }
 
-void String_padLeft(String *const source, size_t length, char ch)
+/**
+ * Pads from the left the current string with a character N amount of times.
+ * @param[in] source the String object to pad.
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_padLeft(String *const source, size_t amount, char ch)
 {
     // resize the sring.
-    size_t len = source->length + length;
+    size_t len = source->length + amount;
     char *padded = (char *)source->data;
     padded = (char *)realloc(padded, (len + 1) * sizeof(char));
 
     // shift all chars and append ch to start
-    for (size_t i = len - 1; i >= length; i--)
-        padded[i] = (padded - length)[i];
-    for (size_t i = 0; i < length; i++)
+    for (size_t i = len - 1; i >= amount; i--)
+        padded[i] = (padded - amount)[i];
+    for (size_t i = 0; i < amount; i++)
         padded[i] = ch;
 
     *source = String_from_parts(padded, len);
 }
 
-void String_padRight(String *const source, size_t length, char ch)
+/**
+ * Pads from the right the current string with a character N amount of times.
+ * @param[in] source the String object to pad.
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_padRight(String *const source, size_t amount, char ch)
 {
     // resize the sring.
-    size_t len = source->length + length;
+    size_t len = source->length + amount;
     char *padded = (char *)source->data;
     padded = (char *)realloc(padded, (len + 1) * sizeof(char));
 
     // append ch to end
-    for (size_t i = len - length; i < len; i++)
+    for (size_t i = len - amount; i < len; i++)
         padded[i] = ch;
 
     *source = String_from_parts(padded, len);
 }
 
-void String_pad(String *const source, size_t length, char ch)
+/**
+ * Pads from the left and right the current string with a character N amount of times.
+ * @param[in] source the String object to pad.
+ * @note This function modifies the original string object.
+ * @return Nothing.
+ */
+void String_pad(String *const source, size_t amount, char ch)
 {
-    String_padLeft(source, length, ch);
-    String_padRight(source, length, ch);
+    String_padLeft(source, amount, ch);
+    String_padRight(source, amount, ch);
 }
