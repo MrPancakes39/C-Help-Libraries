@@ -50,6 +50,9 @@ void String_title(String *const source);
 
 #define STR_FMT "%.*s"                       ///< Defines macro for printf.
 #define STR_ARG(s) (int)(s).length, (s).data ///< Defines macro for printf.
-#define STR_LEN(s) (int)(s).length           ///< Defines macro for printf.
+#define STR_LEN(s) (int)(s).length           ///< Defines macro to get the length for printf.
+
+///< Defines a macro to debug a string.
+#define STR_DEBUG(s) printf("String(data: \"" STR_FMT "\", len: %d)\n", STR_ARG(s), STR_LEN(s));
 
 #endif
