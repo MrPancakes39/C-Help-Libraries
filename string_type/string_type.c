@@ -3,6 +3,15 @@
 #include <ctype.h>
 #include "string_type.h"
 
+// simple strlen() implementation
+size_t cstr_len(const char *cstr)
+{
+    size_t len = 0;
+    while (cstr[len] != '\0')
+        len++;
+    return len;
+}
+
 /**
  * Creates a String from a char-array and it's length.
  * @param[in] data the string literal.
@@ -232,6 +241,35 @@ int String_icmp(String str1, String str2)
     return 0;
 }
 
+bool String_includes(const String source, const String searchStr)
+{
+    if (searchStr.length > source.length)
+        return false;
+
+    for (size_t i = 0; i < source.length - searchStr.length + 1; i++)
+    {
+        bool included = true;
+        for (size_t j = 0; j < searchStr.length; j++)
+        {
+            if (searchStr.data[j] != (source.data + i)[j])
+            {
+                included = false;
+                break;
+            }
+        }
+        if (included)
+            return true;
+    }
+    return false;
+}
+
+bool String_includesL(const String source, const char *cstr)
+{
+    size_t len = cstr_len(cstr);
+    String searchStr = String_from_parts(cstr, len);
+    return String_includes(source, searchStr);
+}
+
 /**
  * Checks if a string starts with a specific prefix.
  * @param[in] source the String object to check.
@@ -300,9 +338,7 @@ bool String_endsWith(const String source, const String suffix)
 bool String_endsWithL(const String source, const char *suffix)
 {
     // convert suffix to String object.
-    size_t len = 0;
-    while (suffix[len] != '\0')
-        len++;
+    size_t len = cstr_len(suffix);
     String suffixStr = String_from_parts(suffix, len);
     // use the previous function
     return String_endsWith(source, suffixStr);

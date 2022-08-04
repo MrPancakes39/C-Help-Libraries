@@ -33,6 +33,9 @@ void String_pad(String *const source, size_t length, char ch);
 int String_cmp(String str1, String str2);
 int String_icmp(String str1, String str2);
 
+bool String_includes(const String source, const String searchStr);
+bool String_includesL(const String source, const char *cstr);
+
 bool String_startWith(const String source, const String prefix);
 bool String_startWithL(const String source, const char *prefix);
 bool String_endsWith(const String source, const String suffix);
