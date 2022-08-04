@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ctype.h>
 #include "string_type.h"
 
 /**
@@ -67,9 +68,6 @@ String String_copy(const String source)
 
     return String_from_parts(buffer, len);
 }
-
-///< defines isspace so no need to import ctype.h
-#define isspace(c) (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == 'f')
 
 /**
  * Remove spaces at the beginning of a String object.
@@ -181,4 +179,54 @@ void String_pad(String *const source, size_t amount, char ch)
 {
     String_padLeft(source, amount, ch);
     String_padRight(source, amount, ch);
+}
+
+/**
+ * Compares two Strings.
+ * @param[in] str1 a String object.
+ * @param[in] str2 a String object.
+ * @return 0 -> if str1 == str2.
+ * @return 1 -> if str1 > str2.
+ * @return -1 -> if str1 < str2.
+ */
+int String_cmp(String str1, String str2)
+{
+    // minimum length
+    size_t len = (str1.length < str2.length) ? str1.length : str2.length;
+    // loop and compare chars
+    for (size_t i = 0; i < len; i++)
+    {
+        int diff = str1.data[i] - str2.data[i];
+        if (diff > 0)
+            return 1;
+        if (diff < 0)
+            return -1;
+    }
+    // if they are equal
+    return 0;
+}
+
+/**
+ * Compares two Strings insensitively.
+ * @param[in] str1 a String object.
+ * @param[in] str2 a String object.
+ * @return 0 -> if str1 == str2.
+ * @return 1 -> if str1 > str2.
+ * @return -1 -> if str1 < str2.
+ */
+int String_icmp(String str1, String str2)
+{
+    // minimum length
+    size_t len = (str1.length < str2.length) ? str1.length : str2.length;
+    // loop and compare chars
+    for (size_t i = 0; i < len; i++)
+    {
+        int diff = tolower(str1.data[i]) - tolower(str2.data[i]);
+        if (diff > 0)
+            return 1;
+        if (diff < 0)
+            return -1;
+    }
+    // if they are equal
+    return 0;
 }

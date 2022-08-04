@@ -25,6 +25,9 @@ void String_trim(String *const source);
 void String_padLeft(String *const source, size_t length, char ch);
 void String_padRight(String *const source, size_t length, char ch);
 void String_pad(String *const source, size_t length, char ch);
+
+int String_cmp(String str1, String str2);
+int String_icmp(String str1, String str2);
 // ===============================================================
 
 ///< Defines macro for creating an empty string.
