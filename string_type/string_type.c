@@ -1,10 +1,11 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include <ctype.h>
 #include "string_type.h"
 
 /**
  * Creates a String from a char-array and it's length.
- * @param[in] data the c-string.
+ * @param[in] data the string literal.
  * @param[in] length the length of the string.
  * @return a String object.
  */
@@ -29,8 +30,8 @@ void String_delete(String *source)
 }
 
 /**
- * Creates a String from a c-string.
- * @param[in] cstr a c-string.
+ * Creates a String from a string literal.
+ * @param[in] cstr a string literal.
  * @return a String object.
  */
 String String_from(const char *cstr)
@@ -229,4 +230,80 @@ int String_icmp(String str1, String str2)
     }
     // if they are equal
     return 0;
+}
+
+/**
+ * Checks if a string starts with a specific prefix.
+ * @param[in] source the String object to check.
+ * @param[in] prefix the prefix String object.
+ * @return true -> if source starts with the prefix.
+ * @return false -> otherwise.
+ */
+bool String_startWith(const String source, const String prefix)
+{
+    if (prefix.length <= source.length)
+    {
+        String cmpStr = String_from_parts(source.data, prefix.length);
+        return (String_cmp(prefix, cmpStr) == 0);
+    }
+    return false;
+}
+
+/**
+ * Checks if a string starts with a specific prefix.
+ * @param[in] source the String object to check.
+ * @param[in] prefix the prefix string literal.
+ * @return true -> if source starts with the prefix.
+ * @return false -> otherwise.
+ */
+bool String_startWithL(const String source, const char *prefix)
+{
+    size_t i;
+    // stops if we reach end of source or end of prefix
+    for (i = 0; (i < source.length && prefix[i] != '\0'); i++)
+        // compares if they don't have matching chars
+        if (source.data[i] != prefix[i])
+            return false;
+
+    // if we reached end of prefix then it starts with it
+    if (prefix[i] == '\0')
+        return true;
+
+    // else we reached end of source
+    return false;
+}
+
+/**
+ * Checks if a string ends with a specific suffix.
+ * @param[in] source the String object to check.
+ * @param[in] suffix the suffix String object.
+ * @return true -> if source ends with the suffix.
+ * @return false -> otherwise.
+ */
+bool String_endsWith(const String source, const String suffix)
+{
+    if (suffix.length <= source.length)
+    {
+        String cmpStr = String_from_parts(source.data + source.length - suffix.length, suffix.length);
+        return (String_cmp(suffix, cmpStr) == 0);
+    }
+    return false;
+}
+
+/**
+ * Checks if a string ends with a specific suffix.
+ * @param[in] source the String object to check.
+ * @param[in] suffix the suffix string literal.
+ * @return true -> if source ends with the suffix.
+ * @return false -> otherwise.
+ */
+bool String_endsWithL(const String source, const char *suffix)
+{
+    // convert suffix to String object.
+    size_t len = 0;
+    while (suffix[len] != '\0')
+        len++;
+    String suffixStr = String_from_parts(suffix, len);
+    // use the previous function
+    return String_endsWith(source, suffixStr);
 }
