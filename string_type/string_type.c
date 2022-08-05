@@ -366,3 +366,164 @@ void String_title(String *const source)
             tmp[i] = tolower(tmp[i]);
     }
 }
+
+size_t String_count(const String source, const String substring)
+{
+    if (substring.length > source.length)
+        return -1;
+
+    size_t count = 0;
+    for (size_t i = 0; i < source.length - substring.length + 1; i++)
+    {
+        bool found = true;
+        for (size_t j = 0; j < substring.length; j++)
+        {
+            if (substring.data[j] != (source.data + i)[j])
+            {
+                found = false;
+                break;
+            }
+        }
+        if (found)
+        {
+            ++count;
+            i = i + substring.length - 1;
+        }
+    }
+    return count;
+}
+
+void String_replace(String *const source, const String old, const String new)
+{
+    String_replaceC(source, old, new, -1);
+}
+
+void String_replaceC(String *const source, const String old, const String new, int count)
+{
+    // get number of time old is in source.
+    const size_t occurances = String_count(*source, old);
+    // if it is zero we can't replace so exit.
+    if (occurances == 0)
+        return;
+
+    // Else calculate total number to replace
+    size_t total = (count == -1)                  ? occurances
+                   : ((size_t)count < occurances) ? (size_t)count
+                                                  : occurances;
+    // and we calculate new length.
+    size_t len = source->length + total * (new.length - old.length);
+    char *new_str = (char *)source->data;
+
+    // if new string is bigger than the old
+    if (len > source->length)
+    {
+        // we increase the size
+        new_str = (char *)realloc(new_str, (len + 1) * sizeof(char));
+        new_str[len] = '\0';
+        size_t src_i = source->length - 1;
+        size_t nstr_i = len - 1;
+
+        if (occurances > total)
+        {
+            // get index of last occurance
+            size_t i = 0, current_count = 0;
+            for (; i <= src_i; i++)
+            {
+                if (current_count == total)
+                    break;
+
+                bool found = true;
+                for (size_t j = 0; j < old.length; j++)
+                {
+                    if (old.data[j] != (new_str + i)[j])
+                    {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    ++current_count;
+                    i = i + old.length - 1;
+                }
+            }
+
+            // copy from end to last occurance
+            for (; nstr_i > i;)
+                new_str[nstr_i--] = new_str[src_i--];
+        }
+
+        for (; nstr_i-- > 0;)
+        {
+            ++nstr_i;
+            if (total == 0)
+                break;
+
+            bool found = true;
+            for (size_t old_i = 0; old_i < old.length; old_i++)
+            {
+                if (old.data[old.length - 1 - old_i] != (new_str + src_i)[-old_i])
+                {
+                    found = false;
+                    break;
+                }
+            }
+            if (found)
+            {
+                // copy new instead of old
+                for (size_t new_i = 0; new_i < new.length; new_i++)
+                {
+                    (new_str + nstr_i)[-new_i] = new.data[new.length - 1 - new_i];
+                }
+                // move src_i to before old
+                src_i -= old.length;
+                // move nstr_i to before new
+                nstr_i -= new.length;
+                // decrease total
+                --total;
+                continue;
+            }
+            // copy src string
+            new_str[nstr_i--] = new_str[src_i--];
+        }
+    }
+    // new string is smaller than the original
+    else
+    {
+        size_t src_i = 0;
+        for (size_t nstr_i = 0; nstr_i < len; nstr_i++)
+        {
+            // if we replaced all total then stop check-replace
+            if (total != 0)
+            {
+                bool found = true;
+                for (size_t old_i = 0; old_i < old.length; old_i++)
+                {
+                    if (old.data[old_i] != (new_str + src_i)[old_i])
+                    {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    // copy new instead of old
+                    for (size_t new_i = 0; new_i < new.length; new_i++)
+                        (new_str + nstr_i)[new_i] = new.data[new_i];
+
+                    nstr_i += new.length - 1;
+                    src_i += old.length;
+                    --total;
+                    continue;
+                }
+            }
+            // copy src string
+            new_str[nstr_i] = new_str[src_i++];
+        }
+
+        // we decrease the size
+        new_str = (char *)realloc(new_str, (len + 1) * sizeof(char));
+        new_str[len] = '\0';
+    }
+    *source = String_from_parts(new_str, len);
+}

@@ -33,7 +33,6 @@ void String_pad(String *const source, size_t length, char ch);
 
 int String_cmp(String str1, String str2);
 int String_icmp(String str1, String str2);
-
 bool String_includes(const String source, const String searchStr);
 
 bool String_startWith(const String source, const String prefix);
@@ -43,6 +42,10 @@ void String_lower(String *const source);
 void String_upper(String *const source);
 void String_capitalize(String *const source);
 void String_title(String *const source);
+
+size_t String_count(const String source, const String substring);
+void String_replace(String *const source, const String old, const String new);
+void String_replaceC(String *const source, const String old, const String new, int count);
 
 // ===============================================================
 
