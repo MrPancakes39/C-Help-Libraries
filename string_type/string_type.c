@@ -420,14 +420,16 @@ void String_replaceC(String *const source, const String old, const String new, i
         // we increase the size
         new_str = (char *)realloc(new_str, (len + 1) * sizeof(char));
         new_str[len] = '\0';
+        // indicies
         size_t src_i = source->length - 1;
         size_t nstr_i = len - 1;
 
+        // if count < MAX
         if (occurances > total)
         {
             // get index of last occurance
-            size_t i = 0, current_count = 0;
-            for (; i <= src_i; i++)
+            size_t lastIndex = 0, current_count = 0;
+            for (; lastIndex <= src_i; lastIndex++)
             {
                 if (current_count == total)
                     break;
@@ -435,7 +437,7 @@ void String_replaceC(String *const source, const String old, const String new, i
                 bool found = true;
                 for (size_t j = 0; j < old.length; j++)
                 {
-                    if (old.data[j] != (new_str + i)[j])
+                    if (old.data[j] != (new_str + lastIndex)[j])
                     {
                         found = false;
                         break;
@@ -444,21 +446,25 @@ void String_replaceC(String *const source, const String old, const String new, i
                 if (found)
                 {
                     ++current_count;
-                    i = i + old.length - 1;
+                    lastIndex += old.length - 1;
                 }
             }
 
             // copy from end to last occurance
-            for (; nstr_i > i;)
+            for (; nstr_i > len - 1 - source->length + lastIndex;)
                 new_str[nstr_i--] = new_str[src_i--];
         }
 
-        for (; nstr_i-- > 0;)
+        for (size_t forw = 0; forw < nstr_i + 1; forw++)
         {
-            ++nstr_i;
+            // if we replaced them all quit
             if (total == 0)
                 break;
 
+            // calculate the wanted index
+            size_t index = nstr_i - forw;
+
+            // check if we encounter old
             bool found = true;
             for (size_t old_i = 0; old_i < old.length; old_i++)
             {
@@ -472,19 +478,15 @@ void String_replaceC(String *const source, const String old, const String new, i
             {
                 // copy new instead of old
                 for (size_t new_i = 0; new_i < new.length; new_i++)
-                {
-                    (new_str + nstr_i)[-new_i] = new.data[new.length - 1 - new_i];
-                }
-                // move src_i to before old
+                    (new_str + index)[-new_i] = new.data[new.length - 1 - new_i];
+
+                forw += new.length - 1;
                 src_i -= old.length;
-                // move nstr_i to before new
-                nstr_i -= new.length;
-                // decrease total
                 --total;
                 continue;
             }
             // copy src string
-            new_str[nstr_i--] = new_str[src_i--];
+            new_str[index] = new_str[src_i--];
         }
     }
     // new string is smaller than the original
