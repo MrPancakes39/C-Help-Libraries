@@ -3,15 +3,6 @@
 #include <ctype.h>
 #include "string_type.h"
 
-// simple strlen() implementation
-size_t cstr_len(const char *cstr)
-{
-    size_t len = 0;
-    while (cstr[len] != '\0')
-        len++;
-    return len;
-}
-
 /**
  * Creates a String from a char-array and it's length.
  * @param[in] data the string literal.
@@ -24,18 +15,6 @@ String String_from_parts(const char *data, size_t length)
     s.data = data;
     s.length = length;
     return s;
-}
-
-/**
- * Frees a String object from memory.
- * @param[in] source a String object to delete.
- * @return Nothing.
- */
-void String_delete(String *source)
-{
-    free((char *)source->data);
-    source->length = 0;
-    source->data = NULL;
 }
 
 /**
@@ -77,6 +56,34 @@ String String_copy(const String source)
     buffer[len] = '\0';
 
     return String_from_parts(buffer, len);
+}
+
+/**
+ * Casts a string literal to a String object.
+ * This creates a static String object not a dynamic one.
+ * Use String_from() method to create a dynamic String object.
+ *
+ * @param[in] cstr a string literal.
+ * @return a static String object.
+ */
+String String_cast(const char *cstr)
+{
+    size_t len = 0;
+    while (cstr[len] != '\0')
+        len++;
+    return String_from_parts(cstr, len);
+}
+
+/**
+ * Frees a String object from memory.
+ * @param[in] source a String object to delete.
+ * @return Nothing.
+ */
+void String_delete(String *source)
+{
+    free((char *)source->data);
+    source->length = 0;
+    source->data = NULL;
 }
 
 /**
@@ -263,13 +270,6 @@ bool String_includes(const String source, const String searchStr)
     return false;
 }
 
-bool String_includesL(const String source, const char *cstr)
-{
-    size_t len = cstr_len(cstr);
-    String searchStr = String_from_parts(cstr, len);
-    return String_includes(source, searchStr);
-}
-
 /**
  * Checks if a string starts with a specific prefix.
  * @param[in] source the String object to check.
@@ -288,30 +288,6 @@ bool String_startWith(const String source, const String prefix)
 }
 
 /**
- * Checks if a string starts with a specific prefix.
- * @param[in] source the String object to check.
- * @param[in] prefix the prefix string literal.
- * @return true -> if source starts with the prefix.
- * @return false -> otherwise.
- */
-bool String_startWithL(const String source, const char *prefix)
-{
-    size_t i;
-    // stops if we reach end of source or end of prefix
-    for (i = 0; (i < source.length && prefix[i] != '\0'); i++)
-        // compares if they don't have matching chars
-        if (source.data[i] != prefix[i])
-            return false;
-
-    // if we reached end of prefix then it starts with it
-    if (prefix[i] == '\0')
-        return true;
-
-    // else we reached end of source
-    return false;
-}
-
-/**
  * Checks if a string ends with a specific suffix.
  * @param[in] source the String object to check.
  * @param[in] suffix the suffix String object.
@@ -326,22 +302,6 @@ bool String_endsWith(const String source, const String suffix)
         return (String_cmp(suffix, cmpStr) == 0);
     }
     return false;
-}
-
-/**
- * Checks if a string ends with a specific suffix.
- * @param[in] source the String object to check.
- * @param[in] suffix the suffix string literal.
- * @return true -> if source ends with the suffix.
- * @return false -> otherwise.
- */
-bool String_endsWithL(const String source, const char *suffix)
-{
-    // convert suffix to String object.
-    size_t len = cstr_len(suffix);
-    String suffixStr = String_from_parts(suffix, len);
-    // use the previous function
-    return String_endsWith(source, suffixStr);
 }
 
 /**

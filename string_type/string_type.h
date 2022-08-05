@@ -16,6 +16,7 @@ typedef struct
 String String_from_parts(const char *data, size_t length);
 String String_from(const char *cstr);
 String String_copy(const String source);
+String String_cast(const char *cstr);
 void String_delete(String *source);
 
 // ===============================================================
@@ -34,12 +35,9 @@ int String_cmp(String str1, String str2);
 int String_icmp(String str1, String str2);
 
 bool String_includes(const String source, const String searchStr);
-bool String_includesL(const String source, const char *cstr);
 
 bool String_startWith(const String source, const String prefix);
-bool String_startWithL(const String source, const char *prefix);
 bool String_endsWith(const String source, const String suffix);
-bool String_endsWithL(const String source, const char *suffix);
 
 void String_lower(String *const source);
 void String_upper(String *const source);
