@@ -85,6 +85,38 @@ void String_delete(String *source)
     source->length = 0;
     source->data = NULL;
 }
+/**
+ * Creates an array of String objects.
+ * @param[in] length the length of the array.
+ * @return a StringArray object.
+ */
+StringArray StringArray_create(size_t length)
+{
+    StringArray sarray;
+    sarray.length = length;
+    if (length == 0)
+        sarray.data = NULL;
+    else
+    {
+        sarray.data = (String *)malloc(length * sizeof(String));
+        for (size_t i = 0; i < sarray.length; i++)
+            sarray.data[i] = String_Empty;
+    }
+    return sarray;
+}
+
+/**
+ * Frees a StringArray object from memory.
+ * @param[in] sourceArray a StringArray object to delete.
+ * @return Nothing.
+ */
+void StringArray_delete(StringArray *sourceArray)
+{
+    for (size_t i = 0; i < sourceArray->length; i++)
+        String_delete((String *)&sourceArray->data[i]);
+    sourceArray->length = 0;
+    sourceArray->data = NULL;
+}
 
 /**
  * Remove spaces at the beginning of a String object.

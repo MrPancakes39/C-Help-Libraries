@@ -11,6 +11,15 @@ typedef struct
     size_t length;
 } String;
 
+/**
+ * Defines an array of String type.
+ */
+typedef struct
+{
+    String *data;
+    size_t length;
+} StringArray;
+
 // ================== String Creation Functions ==================
 
 String String_from_parts(const char *data, size_t length);
@@ -18,6 +27,9 @@ String String_from(const char *cstr);
 String String_copy(const String source);
 String String_cast(const char *cstr);
 void String_delete(String *source);
+
+StringArray StringArray_create(size_t length);
+void StringArray_delete(StringArray *sourceArray);
 
 // ===============================================================
 
@@ -71,5 +83,16 @@ void String_replaceC(String *const source, const String old, const String new, i
 
 ///< Defines a macro to debug a string.
 #define STR_DEBUG(s) printf("String(data: \"" STR_FMT "\", len: %d)\n", STR_ARG(s), STR_LEN(s));
+
+///< Defines a macro to debug a string array.
+#define STRA_DEBUG(sarr)                                      \
+    do                                                        \
+    {                                                         \
+        printf("StringArray(data: [");                        \
+        for (size_t i = 0; i < sarr.length; i++)              \
+            printf("'" STR_FMT "', ", STR_ARG(sarr.data[i])); \
+        printf((sarr.length == 0) ? "" : "\b\b");             \
+        printf("], len=%d)\n", (int)sarr.length);             \
+    } while (0)
 
 #endif
