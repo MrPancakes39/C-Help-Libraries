@@ -754,3 +754,77 @@ StringArray String_partition(const String source, const String sep)
     sarr.data[0] = String_from_parts(buffer, len);
     return sarr;
 }
+
+/**
+ * Creates an array of the lines contained in the string, breaking at line boundaries.
+ * Line breaks are not included in the resulting array.
+ * @param[in] source a String object.
+ * @return a StringArray with all lines in source.
+ */
+StringArray String_splitlines(const String source)
+{
+    /**
+     * Universal Newlines Reference
+     * Representation:    Description:
+     * '\n':              Line Feed.
+     * '\r':              Carriage Return.
+     * "\r\n":            Carriage Return + Line Feed.
+     * '\v' or '\x0b':    Line Tabulation.
+     * '\f' or '\x0c':    Form Feed.
+     * '\x1c':            File Separator.
+     * '\x1d':            Group Separator.
+     * '\x1e':            Record Separator.
+     * '\x85':            Next Line (C1 Control Code).
+     * '\U2028':          Line Separator.               (ignored)
+     * '\U2029':          Paragraph Separator.          (ignored)
+     */
+
+    if (source.data == NULL || source.length == 0)
+        return StringArray_create(0);
+
+    // create the array
+    size_t line = 0;
+    StringArray sarr = StringArray_create(1);
+
+    size_t start = 0;
+    for (size_t i = 0; i < source.length; i++)
+    {
+        char ch = source.data[i];
+        char ch_next = source.data[i + 1];
+        if (ch == '\n' || ch == '\x0b' || ch == '\x0c' || ch == '\x1c' || ch == '\x1d' || ch == '\x1e' || ch == '\x85')
+        {
+            // copy to string array
+            sarr.data[line++] = String_copy(String_from_parts(source.data + start, i - start));
+            start = i + 1;
+            if (ch_next != '\0')
+            {
+                // resize the string array
+                sarr.length++;
+                sarr.data = (String *)realloc(sarr.data, (sarr.length) * sizeof(String));
+                sarr.data[sarr.length - 1] = String_Empty;
+            }
+        }
+        else if (ch == '\r')
+        {
+            // copy to string array
+            sarr.data[line++] = String_copy(String_from_parts(source.data + start, i - start));
+            start = (ch_next != '\n') ? (i + 1) : (i + 2);
+            bool shouldAdd = (ch_next != '\n') ? (ch_next != '\0') : (source.data[i + 2] != '\0');
+            if (shouldAdd)
+            {
+                // resize the string array
+                sarr.length++;
+                sarr.data = (String *)realloc(sarr.data, (sarr.length) * sizeof(String));
+                sarr.data[sarr.length - 1] = String_Empty;
+            }
+            i = start;
+        }
+        else if (ch_next == '\0')
+        {
+            // copy last line to string array
+            sarr.data[line++] = String_copy(String_from_parts(source.data + start, i - start + 1));
+        }
+    }
+
+    return sarr;
+}

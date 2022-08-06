@@ -62,6 +62,7 @@ void String_replaceC(String *const source, const String old, const String new, i
 StringArray String_split(const String source, const String delim);
 String String_join(const StringArray sourceArray, const String joinStr);
 StringArray String_partition(const String source, const String sep);
+StringArray String_splitlines(const String source);
 
 // ===============================================================
 
