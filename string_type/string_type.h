@@ -49,8 +49,21 @@ void String_replaceC(String *const source, const String old, const String new, i
 
 // ===============================================================
 
+// ====================== String Constants  ======================
+
 ///< Defines macro for creating an empty string.
 #define String_Empty String_from_parts(NULL, 0)
+#define STR_ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define STR_ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
+#define STR_ASCII_LETTERS STR_ASCII_UPPERCASE STR_ASCII_LOWERCASE
+#define STR_DIGITS "0123456789"
+#define STR_HEXDIGITS "0123456789abcdefABCDEF"
+#define STR_OCTDIGITS "01234567"
+#define STR_PUNCTUATION "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~."
+#define STR_WHITESPACE " \t\n\r\x0b\x0c"
+#define STR_PRINTABLE STR_DIGITS STR_ASCII_LETTERS STR_PUNCTUATION STR_WHITESPACE
+
+// ===============================================================
 
 #define STR_FMT "%.*s"                       ///< Defines macro for printf.
 #define STR_ARG(s) (int)(s).length, (s).data ///< Defines macro for printf.
