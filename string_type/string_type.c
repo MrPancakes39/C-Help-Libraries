@@ -367,6 +367,12 @@ void String_title(String *const source)
     }
 }
 
+/**
+ * Return the number of non-overlapping occurrences of substring in source.
+ * @param[in] source the String object to search in.
+ * @param[in] substring the Substring object to count number of.
+ * @return the number of substring in source.
+ */
 size_t String_count(const String source, const String substring)
 {
     if (substring.length > source.length)
@@ -393,11 +399,27 @@ size_t String_count(const String source, const String substring)
     return count;
 }
 
+/**
+ * Modifies the String source such that all occurrences of substring old is replaced by new.
+ * @param[in] source a String object.
+ * @param[in] old the substring to replace.
+ * @param[in] new the substring to replace with.
+ * @return Nothing.
+ */
 void String_replace(String *const source, const String old, const String new)
 {
     String_replaceC(source, old, new, -1);
 }
 
+/**
+ * Modifies the String source such that count occurrences of substring old is replaced by new.
+ * If count is -1 then all occurrences are replaced.
+ * @param[in] source a String object.
+ * @param[in] old the substring to replace.
+ * @param[in] new the substring to replace with.
+ * @param[in] count the maximum number of occurrences to replace.
+ * @return Nothing.
+ */
 void String_replaceC(String *const source, const String old, const String new, int count)
 {
     // get number of time old is in source.
