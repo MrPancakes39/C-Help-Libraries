@@ -56,6 +56,8 @@ void String_capitalize(String *const source);
 void String_title(String *const source);
 void String_swapcase(String *const source);
 
+void String_center(String *const source, size_t width, char fillchar);
+
 size_t String_count(const String source, const String substring);
 void String_replace(String *const source, const String old, const String new);
 void String_replaceC(String *const source, const String old, const String new, int count);

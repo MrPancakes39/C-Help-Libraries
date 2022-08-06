@@ -411,6 +411,40 @@ void String_swapcase(String *const source)
 }
 
 /**
+ * Changed a string into a centered string of length width.
+ * Padding is done using the specified fill character.
+ * @param[in] source a String object.
+ * @param[in] width the length to be centered as.
+ * @param[in] fillchar the char to use for padding.
+ * @return Nothing.
+ */
+void String_center(String *const source, size_t width, char fillchar)
+{
+    if (source->length < width)
+    {
+        // calculate fills.
+        size_t diff = width - source->length, lfill, rfill;
+        lfill = rfill = diff / 2;
+        rfill += (diff % 2 == 0) ? 0 : 1;
+
+        // resize string.
+        char *tmp = (char *)source->data;
+        tmp = (char *)realloc(tmp, width * sizeof(char));
+
+        // copy chars.
+        for (size_t i = 0; i < rfill; i++)
+            tmp[width - 1 - i] = fillchar;
+        for (size_t j = 0; j < source->length; j++)
+            tmp[width - rfill - 1 - j] = tmp[source->length - 1 - j];
+        for (size_t k = 0; k < lfill; k++)
+            tmp[k] = fillchar;
+
+        // update the string.
+        *source = String_from_parts(tmp, width);
+    }
+}
+
+/**
  * Return the number of non-overlapping occurrences of substring in source.
  * @param[in] source the String object to search in.
  * @param[in] substring the Substring object to count number of.
