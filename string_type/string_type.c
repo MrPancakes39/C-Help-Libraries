@@ -696,3 +696,61 @@ String String_join(const StringArray sourceArray, const String joinStr)
 
     return String_from_parts(buffer, len);
 }
+
+/**
+ * Partition the string into three parts using the given separator.
+ *
+ * This will search for the separator in the string.  If the separator is found,
+ * returns a 3-tuple containing the part before the separator, the separator
+ * itself, and the part after it.
+ *
+ * If the separator is not found, returns a 3-tuple containing the original string
+ * and two empty strings.
+ *
+ * @param[in] source the String object to partition.
+ * @param[in] sep the seperator string.
+ * @return a partitioned StringArray object.
+ */
+StringArray String_partition(const String source, const String sep)
+{
+    // if empty delimiter
+    if (sep.length == 0 || sep.data == NULL)
+        return StringArray_create(0);
+
+    // create StringArray.
+    StringArray sarr = StringArray_create(3);
+
+    // create buffer
+    size_t len = 0;
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+    buffer[len] = '\0';
+
+    for (size_t i = 0; i < source.length; i++)
+    {
+        bool found = true;
+        for (size_t j = 0; j < sep.length; j++)
+        {
+            if (sep.data[j] != (source.data + i)[j])
+            {
+                found = false;
+                break;
+            }
+        }
+        if (found)
+        {
+            size_t offset = len + sep.length;
+            sarr.data[1] = String_copy(sep);
+            sarr.data[2] = String_copy(String_from_parts(source.data + offset, source.length - offset));
+            break;
+        }
+
+        // resize buffer
+        len++;
+        buffer = (char *)realloc(buffer, (len + 1) * sizeof(char));
+        // copy src to buffer
+        buffer[i] = source.data[i];
+    }
+
+    sarr.data[0] = String_from_parts(buffer, len);
+    return sarr;
+}
