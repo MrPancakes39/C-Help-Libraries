@@ -54,6 +54,7 @@ void String_lower(String *const source);
 void String_upper(String *const source);
 void String_capitalize(String *const source);
 void String_title(String *const source);
+void String_swapcase(String *const source);
 
 size_t String_count(const String source, const String substring);
 void String_replace(String *const source, const String old, const String new);

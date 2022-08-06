@@ -398,6 +398,17 @@ void String_title(String *const source)
             tmp[i] = tolower(tmp[i]);
     }
 }
+/**
+ * Convert uppercase characters to lowercase and lowercase characters to uppercase.
+ * @param[in] source a String object.
+ * @return Nothing.
+ */
+void String_swapcase(String *const source)
+{
+    char *tmp = (char *)source->data;
+    for (size_t i = 0; i < source->length; i++)
+        tmp[i] = isupper(tmp[i]) ? tolower(tmp[i]) : toupper(tmp[i]);
+}
 
 /**
  * Return the number of non-overlapping occurrences of substring in source.
