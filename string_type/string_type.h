@@ -59,6 +59,9 @@ size_t String_count(const String source, const String substring);
 void String_replace(String *const source, const String old, const String new);
 void String_replaceC(String *const source, const String old, const String new, int count);
 
+StringArray String_split(const String source, const String delim);
+String String_join(const StringArray sourceArray, const String joinStr);
+
 // ===============================================================
 
 // ====================== String Constants  ======================

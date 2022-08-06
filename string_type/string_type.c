@@ -583,3 +583,116 @@ void String_replaceC(String *const source, const String old, const String new, i
     }
     *source = String_from_parts(new_str, len);
 }
+
+/**
+ * Divides a string into an array of strings using delim as the delimiter string.
+ * @param[in] source a String object.
+ * @param[in] delim a String object.
+ * @return a StringArray object containing the substrings found.
+ */
+StringArray String_split(const String source, const String delim)
+{
+    // if empty delimiter
+    if (delim.length == 0 || delim.data == NULL)
+        return StringArray_create(0);
+
+    // create the array
+    StringArray sarr = StringArray_create(1);
+
+    size_t start = 0, word = 0;
+    size_t stop = source.length - delim.length + 1;
+    for (size_t i = 0; i < stop; i++)
+    {
+        bool found = true;
+        for (size_t j = 0; j < delim.length; j++)
+        {
+            if (delim.data[j] != (source.data + i)[j])
+            {
+                found = false;
+                break;
+            }
+        }
+        bool copy_end = (!found && i + 1 == stop);
+        if (found || copy_end)
+        {
+            // if copy last part
+            if (copy_end)
+                i = source.length;
+
+            // increase the size of the array
+            if (!copy_end)
+            {
+                sarr.length++;
+                sarr.data = (String *)realloc(sarr.data, (sarr.length) * sizeof(String));
+                sarr.data[sarr.length - 1] = String_Empty;
+            }
+
+            // create slice
+            size_t len = i - start;
+            char *slice = (char *)malloc((len + 1) * sizeof(char));
+            slice[len] = '\0';
+
+            // copy from src to slice
+            for (size_t k = 0; k < len; k++)
+                slice[k] = (source.data + start)[k];
+
+            // update string array
+            sarr.data[word++] = String_from_parts(slice, len);
+
+            i += delim.length - 1;
+            start = i + 1;
+            continue;
+        }
+    }
+
+    return sarr;
+}
+
+/**
+ * Concatenate an array of strings using joinStr.
+ * @param[in] sourceArray a StringArray object.
+ * @param[in] joinStr a String object.
+ * @return a String object.
+ */
+String String_join(const StringArray sourceArray, const String joinStr)
+{
+    if (sourceArray.length == 0)
+        return String_Empty;
+
+    if (sourceArray.length == 1)
+        return String_copy(sourceArray.data[0]);
+
+    size_t len = 0;
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+    buffer[len] = '\0';
+
+    size_t t = 0;
+    for (size_t i = 0; i < sourceArray.length - 1; i++)
+    {
+        // get new length
+        len += sourceArray.data[i].length;
+        len += joinStr.length;
+
+        // resize buffer
+        buffer = (char *)realloc(buffer, (len + 1) * sizeof(char));
+
+        // copy src to buffer
+        for (size_t j = 0; j < sourceArray.data[i].length;)
+            buffer[t++] = sourceArray.data[i].data[j++];
+        // copy delim to buffer
+        for (size_t k = 0; k < joinStr.length;)
+            buffer[t++] = joinStr.data[k++];
+    }
+
+    size_t lastIndex = sourceArray.length - 1;
+
+    // get new length
+    len += sourceArray.data[lastIndex].length;
+    // resize buffer
+    buffer = (char *)realloc(buffer, (len + 1) * sizeof(char));
+    // copy src to buffer
+    for (size_t j = 0; j < sourceArray.data[lastIndex].length;)
+        buffer[t++] = sourceArray.data[lastIndex].data[j++];
+
+    return String_from_parts(buffer, len);
+}
