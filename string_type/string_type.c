@@ -1095,10 +1095,7 @@ bool String_isalpha(const String source)
  */
 bool String_isascii(const String source)
 {
-    // if string is empty.
-    if (source.length == 0 || source.data == NULL)
-        return false;
-    // else check all chars.
+    // check all chars.
     for (size_t i = 0; i < source.length; i++)
         // ASCII characters have value 0 to 127.
         if (!((source.data[i] & ~0x7f) == 0))
