@@ -1138,3 +1138,22 @@ bool String_isprintable(const String source)
     // if all of the chars are alphabetic.
     return true;
 }
+
+/**
+ * Returns true if all characters in the string are spaces and there is at least one character in the string.
+ * @param[in] source the source string.
+ * @return true if the string is made of space.
+ * @return false otherwise
+ */
+bool String_isspace(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // else check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        if (!isspace(source.data[i]))
+            return false;
+    // if all of the chars are alphabetic.
+    return true;
+}
