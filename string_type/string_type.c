@@ -1046,3 +1046,21 @@ StringArray String_splitlines(const String source)
 
     return sarr;
 }
+
+/**
+ * Returns true if all characters in the string are alpha-numeric and there is at least one character in the string.
+ * @return true if the string is an alpha-numeric.
+ * @return false otherwise
+ */
+bool String_isalnum(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // else check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        if (!isalnum(source.data[i]))
+            return false;
+    // if all of the chars are alpha-numeric.
+    return true;
+}
