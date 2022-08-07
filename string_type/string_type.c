@@ -445,6 +445,79 @@ void String_center(String *const source, size_t width, char fillchar)
 }
 
 /**
+ * Modifies the string such that all tab characters are expanded using spaces.
+ * @param[in] source a String object.
+ * @param[in] tabsize the tabsize.
+ * @return Nothing.
+ */
+void String_expandtabs(String *const source, size_t tabsize)
+{
+    // calculate occurances and spaces
+    size_t occurances = 0;
+    size_t current_column = 0;
+    size_t spaces = 0;
+    for (size_t i = 0; i < source->length; i++)
+    {
+        if (source->data[i] == '\t')
+        {
+            occurances++;
+            spaces += tabsize - current_column;
+            current_column = 0;
+            continue;
+        }
+
+        current_column = (current_column + 1) % tabsize;
+
+        // reset column counter if new line
+        if (source->data[i] == '\n' || source->data[i] == '\r')
+            current_column = 0;
+    }
+
+    // resize the string
+    size_t len = source->length - occurances + spaces;
+    char *tmp = (char *)source->data;
+    tmp = (char *)realloc(tmp, (len + 1) * sizeof(char));
+    tmp[len] = '\0';
+
+    // shift data to end of string
+    for (size_t i = 0; i < source->length; i++)
+        tmp[len - 1 - i] = tmp[source->length - 1 - i];
+
+    // expand tabs
+    size_t src_i = len - source->length;
+    current_column = 0;
+    for (size_t t = 0; (t < len - 1); t++)
+    {
+        // we encounter a tab
+        if (tmp[src_i] == '\t')
+        {
+            // copy spaces instead
+            for (size_t j = 0; j < tabsize - current_column; j++)
+                tmp[t++] = ' ';
+            // move src pointer
+            ++src_i;
+            // fix t position
+            --t;
+            // reset column count
+            current_column = 0;
+            continue;
+        }
+
+        // increase column count
+        current_column = (current_column + 1) % tabsize;
+
+        // reset column counter if new line
+        if (tmp[src_i] == '\n' || tmp[src_i] == '\r')
+            current_column = 0;
+
+        // copy from src to tmp
+        tmp[t] = tmp[src_i++];
+    }
+
+    *source = String_from_parts(tmp, len);
+}
+
+/**
  * Return the number of non-overlapping occurrences of substring in source.
  * @param[in] source the String object to search in.
  * @param[in] substring the Substring object to count number of.
