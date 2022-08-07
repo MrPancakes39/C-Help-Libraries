@@ -1065,3 +1065,22 @@ bool String_isalnum(const String source)
     // if all of the chars are alpha-numeric.
     return true;
 }
+
+/**
+ * Returns true if all characters in the string are alphabetic and there is at least one character in the string.
+ * @param[in] source the source string.
+ * @return true if the string is alphabetic.
+ * @return false otherwise
+ */
+bool String_isalpha(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // else check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        if (!isalpha(source.data[i]))
+            return false;
+    // if all of the chars are alphabetic.
+    return true;
+}

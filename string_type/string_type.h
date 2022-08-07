@@ -72,6 +72,7 @@ StringArray String_partition(const String source, const String sep);
 StringArray String_splitlines(const String source);
 
 bool String_isalnum(const String source);
+bool String_isalpha(const String source);
 
 // ===============================================================
 
