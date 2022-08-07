@@ -1122,3 +1122,19 @@ bool String_isdigit(const String source)
     // if all of the chars are alphabetic.
     return true;
 }
+
+/**
+ * Returns true if all characters in the string are printable.
+ * @param[in] source the source string.
+ * @return true if the string is printable.
+ * @return false otherwise
+ */
+bool String_isprintable(const String source)
+{
+    // check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        if (!isprint(source.data[i]))
+            return false;
+    // if all of the chars are alphabetic.
+    return true;
+}
