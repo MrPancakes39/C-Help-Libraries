@@ -73,6 +73,7 @@ StringArray String_splitlines(const String source);
 
 bool String_isalnum(const String source);
 bool String_isalpha(const String source);
+bool String_isascii(const String source);
 
 // ===============================================================
 

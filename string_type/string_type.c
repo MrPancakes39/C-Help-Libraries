@@ -1084,3 +1084,25 @@ bool String_isalpha(const String source)
     // if all of the chars are alphabetic.
     return true;
 }
+
+/**
+ * Returns true if all characters in the string are ascii.
+ * ASCII characters have code points in the range U+0000-U+007F.
+ * Empty string is ASCII too.
+ * @param[in] source the source string.
+ * @return true if the string is ascii.
+ * @return false otherwise
+ */
+bool String_isascii(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // else check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        // ASCII characters have value 0 to 127.
+        if (!((source.data[i] & ~0x7f) == 0))
+            return false;
+    // if all of the chars are ascii.
+    return true;
+}
