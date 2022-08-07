@@ -339,8 +339,8 @@ bool String_endsWith(const String source, const String suffix)
 /**
  * Returns the lowest index in source where substring searchString is found.
  * Returns -1 on failure.
- * @param[in] source
- * @param[in] searchString
+ * @param[in] source the source String object to search.
+ * @param[in] searchString the search String object.
  * @return -1 on failure.
  * @return the first index of searchString in source string on success.
  */
@@ -367,8 +367,8 @@ size_t String_indexOf(const String source, const String searchString)
 /**
  * Returns the index of the last occurrence of substring searchString in source if found.
  * Returns -1 on failure.
- * @param[in] source
- * @param[in] searchString
+ * @param[in] source the source String object to search.
+ * @param[in] searchString the search String object.
  * @return -1 on failure.
  * @return the last index of searchString in source string on success.
  */
@@ -1049,7 +1049,8 @@ StringArray String_splitlines(const String source)
 
 /**
  * Returns true if all characters in the string are alpha-numeric and there is at least one character in the string.
- * @return true if the string is an alpha-numeric.
+ * @param[in] source the source string.
+ * @return true if the string is alpha-numeric.
  * @return false otherwise
  */
 bool String_isalnum(const String source)
