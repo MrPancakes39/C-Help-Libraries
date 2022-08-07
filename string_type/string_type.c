@@ -337,6 +337,34 @@ bool String_endsWith(const String source, const String suffix)
 }
 
 /**
+ * Returns the lowest index in source where substring searchString is found.
+ * Returns -1 on failure.
+ * @param[in] source
+ * @param[in] searchString
+ * @return -1 on failure.
+ * @return the first index of searchString in source string on success.
+ */
+size_t String_indexOf(const String source, const String searchString)
+{
+    for (size_t i = 0; i < source.length - searchString.length + 1; i++)
+    {
+        bool found = true;
+        for (size_t j = 0; j < searchString.length; j++)
+        {
+            if (searchString.data[j] != (source.data + i)[j])
+            {
+                found = false;
+                break;
+            }
+        }
+        if (found)
+            return i;
+    }
+
+    return -1;
+}
+
+/**
  * Converts a string to lowercase.
  * @param[in] source a String object.
  * @return Nothing.
