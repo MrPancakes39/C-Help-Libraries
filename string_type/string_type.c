@@ -1106,3 +1106,22 @@ bool String_isascii(const String source)
     // if all of the chars are ascii.
     return true;
 }
+
+/**
+ * Returns true if all characters in the string are digits and there is at least one character in the string.
+ * @param[in] source the source string.
+ * @return true if the string is made of digits.
+ * @return false otherwise
+ */
+bool String_isdigit(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // else check all chars.
+    for (size_t i = 0; i < source.length; i++)
+        if (!isdigit(source.data[i]))
+            return false;
+    // if all of the chars are alphabetic.
+    return true;
+}
