@@ -365,6 +365,40 @@ size_t String_indexOf(const String source, const String searchString)
 }
 
 /**
+ * Returns the index of the last occurrence of substring searchString in source if found.
+ * Returns -1 on failure.
+ * @param[in] source
+ * @param[in] searchString
+ * @return -1 on failure.
+ * @return the last index of searchString in source string on success.
+ */
+size_t String_lastIndexOf(const String source, const String searchString)
+{
+    // start at end and look for the string
+    size_t end = source.length - searchString.length + 1;
+    for (size_t i = 0; i < end; i++)
+    {
+        // get wanted index.
+        size_t index = end - 1 - i;
+        // search for substring.
+        bool found = true;
+        for (size_t j = 0; j < searchString.length; j++)
+        {
+            if (searchString.data[j] != (source.data + index)[j])
+            {
+                found = false;
+                break;
+            }
+        }
+        // return last index.
+        if (found)
+            return index;
+    }
+    // if not found.
+    return -1;
+}
+
+/**
  * Converts a string to lowercase.
  * @param[in] source a String object.
  * @return Nothing.

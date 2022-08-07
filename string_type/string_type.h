@@ -50,6 +50,7 @@ bool String_includes(const String source, const String searchStr);
 bool String_startWith(const String source, const String prefix);
 bool String_endsWith(const String source, const String suffix);
 size_t String_indexOf(const String source, const String searchString);
+size_t String_lastIndexOf(const String source, const String searchString);
 
 void String_lower(String *const source);
 void String_upper(String *const source);
