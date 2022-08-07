@@ -518,6 +518,44 @@ void String_expandtabs(String *const source, size_t tabsize)
 }
 
 /**
+ * Pad a string with ASCII '0' digits on the left, to fill a field of the given width.
+ * A leading sign prefix ('+'/'-') is handled by inserting the padding after the sign character rather than before.
+ * The original string is not modified if width is less than or equal to length of the string.
+ * @param[in] source the String object to be filled.
+ * @param[in] width the desired string length.
+ * @return Nothing.
+ */
+void String_zfill(String *const source, size_t width)
+{
+    if (source->length < width)
+    {
+        // resize the string.
+        char *tmp = (char *)source->data;
+        tmp = realloc(tmp, (width + 1) * sizeof(char));
+        tmp[width] = '\0';
+
+        // shift src to end.
+        for (size_t i = 0; i < source->length; i++)
+            tmp[width - 1 - i] = tmp[source->length - 1 - i];
+
+        // start of original src in tmp.
+        size_t start = width - source->length;
+
+        // fill with zeros.
+        for (size_t j = 0; j < start; j++)
+            tmp[j] = '0';
+
+        if (tmp[start] == '+' || tmp[start] == '-')
+        {
+            tmp[0] = tmp[start];
+            tmp[start] = '0';
+        }
+
+        *source = String_from_parts(tmp, width);
+    }
+}
+
+/**
  * Return the number of non-overlapping occurrences of substring in source.
  * @param[in] source the String object to search in.
  * @param[in] substring the Substring object to count number of.
