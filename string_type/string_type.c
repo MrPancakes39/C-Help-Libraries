@@ -1195,3 +1195,43 @@ bool String_isupper(const String source)
     // if all of the chars are alphabetic.
     return true;
 }
+
+/**
+ * Returns true if the characters in the string follow the title-case pattern and there is at least one character in the string.
+ * In a title-cased string, upper- and title-case characters may only follow uncased characters and lowercase characters only cased ones.
+ * @param[in] source the source string.
+ * @return true if the string is title-cased.
+ * @return false otherwise
+ */
+bool String_istitle(const String source)
+{
+    // if string is empty.
+    if (source.length == 0 || source.data == NULL)
+        return false;
+    // first char must be upper.
+    if (!isupper(source.data[0]))
+        return false;
+    // loop and check all chars.
+    for (size_t i = 1; i < source.length; i++)
+    {
+        if (isspace(source.data[i]))
+        {
+            // move to next char.
+            ++i;
+            // if we reach end.
+            if (source.data[i] == '\0')
+                return true;
+            // else we check if it is upper.
+            if (!isupper(source.data[i]))
+                return false;
+        }
+        else
+        {
+            // check if it is lower.
+            if (!islower(source.data[i]))
+                return false;
+        }
+    }
+    // if all is good.
+    return true;
+}

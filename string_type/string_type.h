@@ -79,6 +79,7 @@ bool String_isprintable(const String source);
 bool String_isspace(const String source);
 bool String_islower(const String source);
 bool String_isupper(const String source);
+bool String_istitle(const String source);
 
 // ===============================================================
 
