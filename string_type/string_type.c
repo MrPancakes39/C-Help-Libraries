@@ -656,9 +656,9 @@ size_t String_count(const String source, const String substring)
  * @param[in] new the substring to replace with.
  * @return Nothing.
  */
-void String_replace(String *const source, const String old, const String new)
+void String_replaceAll(String *const source, const String old, const String new)
 {
-    String_replaceC(source, old, new, -1);
+    String_replace(source, old, new, -1);
 }
 
 /**
@@ -670,7 +670,7 @@ void String_replace(String *const source, const String old, const String new)
  * @param[in] count the maximum number of occurrences to replace.
  * @return Nothing.
  */
-void String_replaceC(String *const source, const String old, const String new, int count)
+void String_replace(String *const source, const String old, const String new, int count)
 {
     // get number of time old is in source.
     const size_t occurances = String_count(*source, old);
