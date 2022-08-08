@@ -85,6 +85,35 @@ void String_delete(String *source)
     source->length = 0;
     source->data = NULL;
 }
+
+/**
+ * Returns a new string which has source repeated count times and concatenated together.
+ * @param[in] source the String object to be repeated.
+ * @param[in] count how many times to repeat.
+ * @return a repeated String object.
+ */
+String String_repeat(const String source, size_t count)
+{
+    // create buffer for new string.
+    size_t len = source.length * 3;
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+
+    // repeat count times.
+    for (size_t i = 0; i < count; i++)
+    {
+        // calculate the offset.
+        size_t offset = i * source.length;
+        // copy from src to buffer.
+        for (size_t j = 0; j < source.length; j++)
+            (buffer + offset)[j] = source.data[j];
+    }
+
+    // set the last char to be NULL.
+    buffer[len] = '\0';
+    // create String object and return it.
+    return String_from_parts(buffer, len);
+}
+
 /**
  * Creates an array of String objects.
  * @param[in] length the length of the array.

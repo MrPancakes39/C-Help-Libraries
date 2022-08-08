@@ -28,6 +28,8 @@ String String_copy(const String source);
 String String_cast(const char *cstr);
 void String_delete(String *source);
 
+String String_repeat(const String source, size_t count);
+
 StringArray StringArray_create(size_t length);
 void StringArray_delete(StringArray *sourceArray);
 
