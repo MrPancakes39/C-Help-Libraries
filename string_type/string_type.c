@@ -201,14 +201,14 @@ String String_slice(const String source, long start, long end)
     if (start >= (long)source.length)
         return String_Empty;
 
-    // handle if start index out of index range of source.
+    // handle if end index out of index range of source.
     if (end >= (long)source.length)
         end = source.length;
 
     // handle negative start index.
     if (start < 0)
     {
-        start = source.length + start;
+        start = source.length + start + 1;
         if (start < 0)
             start = 0;
     }
@@ -216,7 +216,7 @@ String String_slice(const String source, long start, long end)
     // handle negative end index.
     if (end < 0)
     {
-        end = source.length + end;
+        end = source.length + end + 1;
         if (end < 0)
             end = 0;
     }
