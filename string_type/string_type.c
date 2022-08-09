@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
@@ -14,6 +15,7 @@ String String_from_parts(const char *data, size_t length)
     String s;
     s.data = data;
     s.length = length;
+    s.props = 0;
     return s;
 }
 
@@ -71,7 +73,9 @@ String String_cast(const char *cstr)
     size_t len = 0;
     while (cstr[len] != '\0')
         len++;
-    return String_from_parts(cstr, len);
+    String s = String_from_parts(cstr, len);
+    s.props = 0x01;
+    return s;
 }
 
 /**
@@ -81,6 +85,12 @@ String String_cast(const char *cstr)
  */
 void String_delete(String *source)
 {
+    if (String_isStatic(*source))
+    {
+        fprintf(stderr, "Error: tried to free a static string.\n");
+        exit(1);
+    }
+
     free((char *)source->data);
     source->length = 0;
     source->data = NULL;
@@ -1287,4 +1297,15 @@ bool String_istitle(const String source)
     }
     // if all is good.
     return true;
+}
+
+/**
+ * Checks if a str is static.
+ * @param[in] str a String object.
+ * @return true if static string.
+ * @return false otherwise.
+ */
+bool String_isStatic(const String str)
+{
+    return (str.props & 0x01) == 1;
 }

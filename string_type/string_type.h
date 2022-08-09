@@ -1,6 +1,7 @@
 #ifndef STRING_TYPE_H_INCLUDED
 #define STRING_TYPE_H_INCLUDED
 #include <stdbool.h>
+#include <stdint.h>
 
 /**
  * Defines a String type.
@@ -9,6 +10,7 @@ typedef struct
 {
     const char *data;
     size_t length;
+    int8_t props;
 } String;
 
 /**
@@ -83,6 +85,12 @@ bool String_isspace(const String source);
 bool String_islower(const String source);
 bool String_isupper(const String source);
 bool String_istitle(const String source);
+
+// ===============================================================
+
+// =================== String Helper Functions ===================
+
+bool String_isStatic(const String str);
 
 // ===============================================================
 
