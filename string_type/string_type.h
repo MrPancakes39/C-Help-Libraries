@@ -100,6 +100,7 @@ bool String_istitle(const String source);
 
 bool String_isStatic(const String str);
 bool String_isSlice(const String str);
+uint64_t String_toU64(const String source);
 
 // ===============================================================
 

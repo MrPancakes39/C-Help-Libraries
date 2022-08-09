@@ -1,7 +1,8 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
-#include <ctype.h>
 #include "string_type.h"
 
 /**
@@ -1427,4 +1428,28 @@ bool String_isStatic(const String str)
 bool String_isSlice(const String str)
 {
     return ((str.props & 0x02) >> 1) == 1;
+}
+
+/**
+ * Converts a string to an unsigned 64bit integer (uint64_t).
+ * @param[in] source a String object.
+ * @return a uint64_t representation of the string.
+ */
+uint64_t String_toU64(const String source)
+{
+    // trim source data
+    size_t len = source.length;
+    char *tmp = (char *)source.data;
+    while (*tmp != '\0' && isspace(*tmp))
+    {
+        ++tmp;
+        --len;
+    }
+    while (isspace(tmp[len - 1]))
+        --len;
+
+    uint64_t result = 0;
+    for (size_t i = 0; (i < len && isdigit(tmp[i])); i++)
+        result = (result * 10) + (tmp[i] - '0');
+    return result;
 }
