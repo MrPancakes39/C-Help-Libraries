@@ -42,6 +42,7 @@ void StringArray_delete(StringArray *sourceArray);
 
 String String_slice(const String source, long start, long end);
 String String_hardSlice(const String source, long start, long end);
+String String_hardSliceWithStep(const String source, long start, long end, long step);
 
 // ===============================================================
 

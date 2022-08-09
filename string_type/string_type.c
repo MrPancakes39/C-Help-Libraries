@@ -244,6 +244,52 @@ String String_hardSlice(const String source, long start, long end)
 }
 
 /**
+ * Extracts a section of a string by taking steps and returns it as a new string, without modifying the original string.
+ * This is a hard slice that copies from the original String object and needs to be freed.
+ * @param[in] source a String object.
+ * @param[in] start the start index.
+ * @param[in] end the end index.
+ * @param[in] step the step to take.
+ * @return a String object.
+ */
+String String_hardSliceWithStep(const String source, long start, long end, long step)
+{
+    // check step.
+    if (step == 0)
+    {
+        fprintf(stderr, "Error: slice step cannot be zero.\n");
+        exit(1);
+    }
+
+    // fix the step.
+    bool positiveStep = step > 0;
+    if (!positiveStep)
+        step *= -1;
+
+    // get reference slice.
+    String s = (positiveStep) ? String_slice(source, start, end) : String_slice(source, end, start);
+
+    // calculate length.
+    size_t len = s.length / step;
+    // round up.
+    if (s.length % step != 0)
+        ++len;
+    // create buffer.
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+    buffer[len] = '\0';
+
+    // copy from src to buffer.
+    if (positiveStep)
+        for (size_t i = 0, t = 0; (i < s.length && t < len); i += step, t++)
+            buffer[t] = s.data[i];
+    else
+        for (size_t i = 0, t = 0; (i < s.length && t < len); i += step, t++)
+            buffer[len - 1 - t] = s.data[i];
+
+    return String_from_parts(buffer, len);
+}
+
+/**
  * Remove spaces at the beginning of a String object.
  * @param[in] source the String object to trim.
  * @note This function modifies the original string object.
