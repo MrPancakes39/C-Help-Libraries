@@ -29,6 +29,7 @@ String String_cast(const char *cstr);
 void String_delete(String *source);
 
 String String_repeat(const String source, size_t count);
+String String_concat(const String str1, const String str2);
 
 StringArray StringArray_create(size_t length);
 void StringArray_delete(StringArray *sourceArray);

@@ -115,6 +115,30 @@ String String_repeat(const String source, size_t count)
 }
 
 /**
+ * Concatenates two string and returns a new string.
+ * @param[in] str1 a String object.
+ * @param[in] str2 a String object.
+ * @return a String object.
+ */
+String String_concat(const String str1, const String str2)
+{
+    // create buffer.
+    size_t len = str1.length + str2.length;
+    char *buffer = (char *)malloc((len + 1) * sizeof(char));
+    buffer[len] = '\0';
+
+    // copy from str1 to buffer.
+    for (size_t i = 0; i < str1.length; i++)
+        buffer[i] = str1.data[i];
+
+    // copy from str2 to buffer.
+    for (size_t j = 0; j < str2.length; j++)
+        (buffer + str1.length)[j] = str2.data[j];
+
+    return String_from_parts(buffer, len);
+}
+
+/**
  * Creates an array of String objects.
  * @param[in] length the length of the array.
  * @return a StringArray object.
