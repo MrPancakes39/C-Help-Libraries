@@ -91,6 +91,12 @@ void String_delete(String *source)
         exit(1);
     }
 
+    if (String_isSlice(*source))
+    {
+        fprintf(stderr, "Error: Don't free a slice, free orignal string.\n");
+        exit(1);
+    }
+
     free((char *)source->data);
     source->length = 0;
     source->data = NULL;
@@ -179,6 +185,49 @@ void StringArray_delete(StringArray *sourceArray)
         String_delete((String *)&sourceArray->data[i]);
     sourceArray->length = 0;
     sourceArray->data = NULL;
+}
+
+/**
+ * Extracts a section of a string and returns it as a new string, without modifying the original string.
+ * This is a soft slice that references the original String object and thus doesn't need freeing.
+ * @param[in] source a String object.
+ * @param[in] start the start index.
+ * @param[in] end the end index.
+ * @return a String object.
+ */
+String String_slice(const String source, long start, long end)
+{
+    // handle if start index out of index range of source.
+    if (start >= (long)source.length)
+        return String_Empty;
+
+    // handle if start index out of index range of source.
+    if (end >= (long)source.length)
+        end = source.length;
+
+    // handle negative start index.
+    if (start < 0)
+    {
+        start = source.length + start;
+        if (start < 0)
+            start = 0;
+    }
+
+    // handle negative end index.
+    if (end < 0)
+    {
+        end = source.length + end;
+        if (end < 0)
+            end = 0;
+    }
+
+    // handle start > end.
+    if (start >= end)
+        return String_Empty;
+
+    String s = String_from_parts(source.data + start, end - start);
+    s.props = 0x02;
+    return s;
 }
 
 /**
@@ -1308,4 +1357,15 @@ bool String_istitle(const String source)
 bool String_isStatic(const String str)
 {
     return (str.props & 0x01) == 1;
+}
+
+/**
+ * Checks if a str is a slice.
+ * @param[in] str a String object.
+ * @return true if slice of a string.
+ * @return false otherwise.
+ */
+bool String_isSlice(const String str)
+{
+    return ((str.props & 0x02) >> 1) == 1;
 }

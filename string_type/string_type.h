@@ -38,6 +38,12 @@ void StringArray_delete(StringArray *sourceArray);
 
 // ===============================================================
 
+// ======================= Slice Functions =======================
+
+String String_slice(const String source, long start, long end);
+
+// ===============================================================
+
 // ======================= String Methods  =======================
 
 void String_trimLeft(String *const source);
@@ -91,6 +97,7 @@ bool String_istitle(const String source);
 // =================== String Helper Functions ===================
 
 bool String_isStatic(const String str);
+bool String_isSlice(const String str);
 
 // ===============================================================
 
