@@ -41,6 +41,7 @@ void StringArray_delete(StringArray *sourceArray);
 // ======================= Slice Functions =======================
 
 String String_slice(const String source, long start, long end);
+String String_hardSlice(const String source, long start, long end);
 
 // ===============================================================
 

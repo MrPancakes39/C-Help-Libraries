@@ -231,6 +231,19 @@ String String_slice(const String source, long start, long end)
 }
 
 /**
+ * Extracts a section of a string and returns it as a new string, without modifying the original string.
+ * This is a hard slice that copies from the original String object and needs to be freed.
+ * @param[in] source a String object.
+ * @param[in] start the start index.
+ * @param[in] end the end index.
+ * @return a String object.
+ */
+String String_hardSlice(const String source, long start, long end)
+{
+    return String_copy(String_slice(source, start, end));
+}
+
+/**
  * Remove spaces at the beginning of a String object.
  * @param[in] source the String object to trim.
  * @note This function modifies the original string object.
