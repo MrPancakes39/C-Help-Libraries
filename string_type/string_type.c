@@ -1437,7 +1437,7 @@ bool String_isSlice(const String str)
  */
 uint64_t String_toU64(const String source)
 {
-    // trim source data
+    // trim source data.
     size_t len = source.length;
     char *tmp = (char *)source.data;
     while (*tmp != '\0' && isspace(*tmp))
@@ -1451,5 +1451,46 @@ uint64_t String_toU64(const String source)
     uint64_t result = 0;
     for (size_t i = 0; (i < len && isdigit(tmp[i])); i++)
         result = (result * 10) + (tmp[i] - '0');
+    return result;
+}
+
+/**
+ * Converts a string to a 64bit floating-point number (float64_t).
+ * @param[in] source a String object.
+ * @return a float64_t representation of the string.
+ */
+float64_t String_toF64(const String source)
+{
+    // init the result.
+    float64_t result = 0;
+
+    // trim source data.
+    size_t len = source.length;
+    char *tmp = (char *)source.data;
+    while (*tmp != '\0' && isspace(*tmp))
+    {
+        ++tmp;
+        --len;
+    }
+    while (isspace(tmp[len - 1]))
+        --len;
+
+    // convert decimal part.
+    size_t i;
+    for (i = 0; (i < len && isdigit(tmp[i])); i++)
+        result = (result * 10) + (tmp[i] - '0');
+    // convert floating part.
+    if (i < len && tmp[i] == '.')
+    {
+        ++i;
+        for (size_t t = 1; (i < len && isdigit(tmp[i])); i++, t++)
+        {
+            float64_t digit = tmp[i] - '0';
+            for (size_t j = 0; j < t; j++)
+                digit /= 10.0;
+            result += digit;
+        }
+    }
+
     return result;
 }

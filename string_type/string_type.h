@@ -2,6 +2,7 @@
 #define STRING_TYPE_H_INCLUDED
 #include <stdbool.h>
 #include <stdint.h>
+typedef double float64_t;
 
 /**
  * Defines a String type.
@@ -101,6 +102,7 @@ bool String_istitle(const String source);
 bool String_isStatic(const String str);
 bool String_isSlice(const String str);
 uint64_t String_toU64(const String source);
+float64_t String_toF64(const String source);
 
 // ===============================================================
 
